@@ -75,7 +75,7 @@ def index():
 @app.route("/buy", methods=["GET", "POST"])
 @login_required
 def buy():
-    """Buy shares of stock"""
+    """Buy $SAM tokens"""
 
     # GET request
     if request.method == "GET":
@@ -84,7 +84,7 @@ def buy():
     # POST request
     else:
         # get symbol and shares from form
-        symbol = request.form.get("symbol")
+        symbol = "SAM"
         shares = request.form.get("shares")
         quote = lookup(symbol)
 
@@ -323,7 +323,7 @@ def register():
 @app.route("/sell", methods=["GET", "POST"])
 @login_required
 def sell():
-    """Sell shares of stock"""
+    """Sell $SAM tokens"""
 
     # GET request
     if request.method == "GET":
@@ -338,7 +338,7 @@ def sell():
     # POST request
     else:
         # get info from form
-        symbol = request.form.get("symbol")
+        symbol = "SAM"
         shares = request.form.get("shares")
 
         # check if shares is number
