@@ -1,0 +1,26 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Delete Account
+{% endblock %}
+
+{% block main %}
+<div class="card mx-auto" style="width: 25rem;">
+    <div class="card-body">
+        <h5 class="card-title">Delete Account</h5>
+        <p class="card-text">Are you sure you want to delete your account?</p>
+        <form action="/delete" method="post">
+            <!-- password and confirmation -->
+            <div class="mb-3">
+                <input class="form-control" id="password" name="password" placeholder="Password" type="password">
+            </div>
+            <div class="mb-3">
+                <input class="form-control" id="confirmation" name="confirmation" placeholder="Confirmation" type="password">
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-danger" type="submit">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

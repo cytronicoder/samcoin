@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Quote
+{% endblock %}
+
+{% block main %}
+<div class="card mx-auto" style="width: 25rem;">
+    <div class="card-body">
+        <h5 class="card-title">Quote</h5>
+        <form action="/quote" method="post">
+            <!-- symbol -->
+            <div class="mb-3">
+                <input class="form-control" id="symbol" name="symbol" value="SAM" disabled />
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-primary" type="submit">Quote</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

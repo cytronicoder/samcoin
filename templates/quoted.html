@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Quote
+{% endblock %}
+
+
+{% block main %}
+<div class="card mx-auto" style="width: 50rem;">
+    <div class="card-body">
+        <h5 class="card-title">Quote for {{ symbol['name'] }}</h5>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">Symbol</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ symbol['symbol'] }}</td>
+                    <td>{{ symbol['name'] }}</td>
+                    <td>{{ symbol['price'] | sgd }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

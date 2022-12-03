@@ -59,10 +59,10 @@ def index():
 
     # add stock name, current lookup value, and total value and translate to sgd
     for row in rows:
-        look = lookup(row['symbol'])
+        look = lookup()
         row['name'] = look['name']
         row['price'] = look['price']
-        row['total'] = row['price'] * row['shares']
+        row['total'] = row['price'] * row['amount']
 
         sum += row['total']
 
@@ -83,33 +83,34 @@ def buy():
 
     # POST request
     else:
-        # get symbol and shares from form
+        # get symbol and amount from form
         symbol = "SAM"
-        shares = request.form.get("shares")
-        quote = lookup(symbol)
+        amount = request.form.get("amount")
+        print(amount)
+        quote = lookup()
 
         # check if symbol is valid
         if quote == None:
             return apology("must provide valid stock symbol", 400)
 
-        # check if shares is valid
-        if not shares:
-            return apology("must provide number of shares", 400)
+        # check if amount is valid
+        if not amount:
+            return apology("must provide number of amount", 400)
 
-        # check if shares is number
-        if not shares.isdigit():
-            return apology("You cannot purchase partial shares.", 400)
+        # check if amount is number
+        if not amount.isdigit():
+            return apology("You cannot purchase partial amount.", 400)
 
-        # cast shares to int
-        shares = int(shares)
+        # cast amount to int
+        amount = int(amount)
 
-        # if shares is not positive
-        if shares <= 0:
+        # if amount is not positive
+        if amount <= 0:
             return apology("must provide positive integer", 400)
 
         # symbol to uppercase
         symbol = symbol.upper()
-        purchase = quote['price'] * shares
+        purchase = quote['price'] * amount
 
         # select user's cash balance to check if they can afford purchase
         balance = db.execute(
@@ -120,7 +121,7 @@ def buy():
         if remainder < 0:
             return apology("insufficient funds", 400)
 
-        # query portfolio to check if user already owns shares of this stock
+        # query portfolio to check if user already owns amount of this stock
         row = db.execute("SELECT * FROM portfolio WHERE userid = :id AND symbol = :symbol",
                          id=session["user_id"], symbol=symbol)
 
@@ -129,23 +130,23 @@ def buy():
             db.execute("INSERT INTO portfolio (userid, symbol) VALUES (:id, :symbol)",
                        id=session["user_id"], symbol=symbol)
 
-        # get previous number of shares owned by user
-        oldshares = db.execute("SELECT shares FROM portfolio WHERE userid = :id AND symbol = :symbol",
+        # get previous number of amount owned by user
+        oldshares = db.execute("SELECT amount FROM portfolio WHERE userid = :id AND symbol = :symbol",
                                id=session["user_id"], symbol=symbol)
-        oldshares = oldshares[0]["shares"]
+        oldshares = oldshares[0]["amount"]
 
-        # update portfolio with new number of shares and cash balance
-        newshares = oldshares + shares
+        # update portfolio with new number of amount and cash balance
+        newshares = oldshares + amount
 
-        db.execute("UPDATE portfolio SET shares = :newshares WHERE userid = :id AND symbol = :symbol",
+        db.execute("UPDATE portfolio SET amount = :newshares WHERE userid = :id AND symbol = :symbol",
                    newshares=newshares, id=session["user_id"], symbol=symbol)
 
         db.execute("UPDATE users SET cash = :remainder WHERE id = :id",
                    remainder=remainder, id=session["user_id"])
 
         # update history table with purchase
-        db.execute("INSERT INTO history (userid, symbol, shares, method, price) VALUES (:userid, :symbol, :shares, 'Buy', :price)",
-                   userid=session["user_id"], symbol=symbol, shares=shares, price=quote['price'])
+        db.execute("INSERT INTO history (userid, symbol, amount, method, price) VALUES (:userid, :symbol, :amount, 'Buy', :price)",
+                   userid=session["user_id"], symbol=symbol, amount=amount, price=quote['price'])
 
     # redirect to index
     return redirect("/")
@@ -266,7 +267,7 @@ def quote():
     else:
 
         # lookup ticker symbol
-        symbol = lookup(request.form.get("symbol"))
+        symbol = lookup()
 
         # if symbol is invalid
         if symbol == None:
@@ -339,40 +340,40 @@ def sell():
     else:
         # get info from form
         symbol = "SAM"
-        shares = request.form.get("shares")
+        amount = request.form.get("amount")
 
-        # check if shares is number
-        if not shares.isdigit():
-            return apology("You cannot sell partial shares.", 400)
+        # check if amount is number
+        if not amount.isdigit():
+            return apology("You cannot sell partial amount.", 400)
 
-        shares = int(shares)
+        amount = int(amount)
 
-        # if shares is not positive
-        if shares <= 0:
+        # if amount is not positive
+        if amount <= 0:
             return apology("must provide positive integer", 400)
 
         # lookup stock info
-        quote = lookup(symbol)
+        quote = lookup()
         rows = db.execute("SELECT * FROM portfolio WHERE userid = :id AND symbol = :symbol",
                           id=session["user_id"], symbol=symbol)
 
-        # return apology if symbol or number of shares is invalid
+        # return apology if symbol or number of amount is invalid
         if len(rows) != 1:
             return apology("must provide valid stock symbol", 400)
 
-        if not shares:
-            return apology("must provide number of shares", 400)
+        if not amount:
+            return apology("must provide number of amount", 400)
 
-        # convert number of shares to integer
-        oldshares = rows[0]['shares']
-        shares = int(shares)
+        # convert number of amount to integer
+        oldshares = rows[0]['amount']
+        amount = int(amount)
 
-        # if owned shares is less than number of shares to sell
-        if shares > oldshares:
-            return apology("shares sold can't exceed shares owned", 400)
+        # if owned amount is less than number of amount to sell
+        if amount > oldshares:
+            return apology("amount sold can't exceed amount owned", 400)
 
         # get the total value of the sale
-        sold = quote['price'] * shares
+        sold = quote['price'] * amount
 
         # update cash balance accordingly
         cash = db.execute(
@@ -383,21 +384,21 @@ def sell():
         db.execute("UPDATE users SET cash = :cash WHERE id = :id",
                    cash=cash, id=session["user_id"])
 
-        # new number of shares
-        newshares = oldshares - shares
+        # new number of amount
+        newshares = oldshares - amount
 
-        # if new number of shares is 0, delete stock from portfolio
-        # else update number of shares
+        # if new number of amount is 0, delete stock from portfolio
+        # else update number of amount
         if newshares > 0:
-            db.execute("UPDATE portfolio SET shares = :newshares WHERE userid = :id AND symbol = :symbol",
+            db.execute("UPDATE portfolio SET amount = :newshares WHERE userid = :id AND symbol = :symbol",
                        newshares=newshares, id=session["user_id"], symbol=symbol)
         else:
             db.execute("DELETE FROM portfolio WHERE symbol = :symbol AND userid = :id",
                        symbol=symbol, id=session["user_id"])
 
         # update history table
-        db.execute("INSERT INTO history (userid, symbol, shares, method, price) VALUES (:userid, :symbol, :shares, 'Sell', :price)",
-                   userid=session["user_id"], symbol=symbol, shares=shares, price=quote['price'])
+        db.execute("INSERT INTO history (userid, symbol, amount, method, price) VALUES (:userid, :symbol, :amount, 'Sell', :price)",
+                   userid=session["user_id"], symbol=symbol, amount=amount, price=quote['price'])
 
         # redirect
         return redirect("/")

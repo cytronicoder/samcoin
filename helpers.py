@@ -1,4 +1,5 @@
 import os
+import requests
 import urllib.parse
 
 from flask import redirect, render_template, request, session
@@ -33,6 +34,20 @@ def sgd(value):
     return f"${value:,.2f}"
 
 
-def lookup(symbol):
-    """Look up quote for symbol."""
-    # TODO
+def lookup():
+    """Look up quote for Ethereum (ETH)."""
+    # Contact API (CoinGecko)
+    try:
+        # no api key needed
+        data = requests.get(f"https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=sgd").json()
+
+        # Parse response
+        price = data["ethereum"]["sgd"]
+
+        return {
+            "name": "Samcoin",
+            "price": price,
+            "symbol": "SAM"
+        }
+    except:
+        return None
