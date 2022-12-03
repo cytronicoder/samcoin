@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Register
+{% endblock %}
+
+{% block main %}
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <h1>Register</h1>
+      <p>
+        Register for a new account to buy and sell $SAM tokens.
+      </p>
+      <form action="/register" method="post">
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input type="text" class="form-control" id="username" name="username" />
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="password" class="form-control" id="password" name="password" />
+        </div>
+        <div class="mb-3">
+          <label for="confirmation" class="form-label">Password Confirmation</label>
+          <input type="password" class="form-control" id="confirmation" name="confirmation" />
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
