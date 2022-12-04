@@ -130,3 +130,6 @@ dmypy.json
 
 # Database
 meme.db
+
+# Vercel
+.vercel

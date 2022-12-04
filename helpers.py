@@ -35,11 +35,16 @@ def sgd(value):
 
 
 def lookup():
-    """Look up quote for Ethereum (ETH)."""
+    """Look up quote for Ethereum (ETH)
+
+    Right now, Samcoin is a mockup of Ethereum, so we're using the same API. 
+    In the future, we'll have our own API, with a dynamic token economy.
+    """
     # Contact API (CoinGecko)
     try:
         # no api key needed
-        data = requests.get(f"https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=sgd").json()
+        data = requests.get(
+            f"https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=sgd").json()
 
         # Parse response
         price = data["ethereum"]["sgd"]
