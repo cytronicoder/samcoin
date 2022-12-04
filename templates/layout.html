@@ -90,32 +90,32 @@
           {% if session["user_id"] %}
           <ul class="navbar-nav me-auto mt-2">
             <li class="nav-item">
-              <a class="nav-link" href="/quote">Quote</a>
+              <a class="nav-link" href="{{ url_for('quote') }}">Quote</a>
             </li>
-            <li class="nav-item"><a class="nav-link" href="/buy">Buy</a></li>
-            <li class="nav-item"><a class="nav-link" href="/sell">Sell</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('buy') }}">Buy</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ url_for('sell') }}">Sell</a></li>
             <li class="nav-item">
-              <a class="nav-link" href="/history">History</a>
+              <a class="nav-link" href="{{ url_for('history') }}">History</a>
             </li>
           </ul>
           <ul class="navbar-nav ms-auto mt-2">
             <li class="nav-item">
-              <a class="nav-link" href="/password">Change Password</a>
+              <a class="nav-link" href="{{ url_for('password') }}">Change Password</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/delete">Delete Account</a>
+              <a class="nav-link" href="{{ url_for('delete') }}">Delete Account</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/logout">Log Out</a>
+              <a class="nav-link" href="{{ url_for('logout') }}">Log Out</a>
             </li>
           </ul>
           {% else %}
           <ul class="navbar-nav ms-auto mt-2">
             <li class="nav-item">
-              <a class="nav-link" href="/register">Register</a>
+              <a class="nav-link" href="{{ url_for('register') }}">Register</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/login">Log In</a>
+              <a class="nav-link" href="{{ url_for('login') }}">Log In</a>
             </li>
           </ul>
           {% endif %}
@@ -136,7 +136,7 @@
     </main>
 
     <footer class="mb-5 small text-center text-muted">
-      Made with ❤️ by <a href="https://saishack.club">SAIS Hack Club</a>
+      Made with ❤️ by <a href="https://saishack.club">SAIS Hack Club</a>, with data collected from <a href="https://coingecko.com">CoinGecko</a>.
     </footer>
   </body>
 </html>
