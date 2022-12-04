@@ -26,3 +26,4 @@ This is a very simple app that allows you to create an account, buy and sell Sam
 - Get transfer of Samcoins between users working
 - Add a leaderboard and a way to earn Samcoins by doing tasks (?)
 - Memes (obviously) and fake ads
+- Move all data to database hosted on Supabase
