@@ -1,3 +1,5 @@
+### 📂 This repository is now archived as a past hackathon submission.
+
 # Samcoin
 
 This is Samcoin, a meme/fake coin designed to be used as a joke during [Lion City Hacks 2022](https://lioncityhacks.com/). It is built with [Flask](https://flask.palletsprojects.com/en/2.0.x/) because it's for the memes not to use React or Next.js.
